@@ -9,7 +9,7 @@ import { db } from "../data/firebase.data.js";
 export async function readDocuments(collectionName) {
     const colRef = collection(db, collectionName);
     const snapshot = await getDocs(colRef);
-    return snapshot.docs.maps((docSnap) => ({ id: docSnap.id, ...docSnap.data()}));
+    return snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data()}));
 }
 
 /**
@@ -88,5 +88,5 @@ export async function queryDocumentsByStatus(collectionName) {
   const colRef = collection(db, collectionName);
   const q = query(colRef, where("status", "==", "activo"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+  return snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data()}));
 }

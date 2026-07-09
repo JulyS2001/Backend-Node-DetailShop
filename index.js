@@ -1,14 +1,12 @@
 import express from 'express';
-import { join, dirname} from 'path';
-import { fileURLToPath } from 'url';
 import cors from 'cors'; 
 import 'dotenv/config';
 import productsRouter from './src/routes/products.routes.js';
+import authRouter from "./src/routes/auth.routes.js";
+import bodyParser from 'body-parser';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
-const PORT = 2000; 
+const PORT = process.env.PORT; 
 
 const app = express (); 
 
@@ -25,6 +23,8 @@ app.use(cors({
     allowedHeaders: ["Content-type", "Authorization"]
 }));
 
+app.use(bodyParser.json());
+
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -32,13 +32,18 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(productsRouter);
+app.use("/api/products", productsRouter);
+app.use("/auth", authRouter);
 
 app.use(function(req, res, next) {
     res.status(404)
     res.send("Ruta no encontrada.");
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor en http://localhost:${PORT}`);
-});
+if(process.env.NODE_ENV !== "production"){
+    app.listen(PORT, () => {
+        console.log(`Servidor en http://localhost:${PORT}`);
+    });
+}
+
+export default app;

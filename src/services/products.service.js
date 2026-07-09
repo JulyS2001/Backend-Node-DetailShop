@@ -8,7 +8,7 @@ export const deleteProductService = async (id) => {
     return await deleteDocument("productos", id)
 }
 
-export const updateproductService = async (id, data) => {
+export const updateProductService = async (id, data) => {
     return await updateDocument("productos", id, data)
 }
 

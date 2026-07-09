@@ -1,5 +1,5 @@
-import {  getProductByIdService, getProductsByFilters, createProductService, updateproductService } from "../services/products.service.js";
-import { getAllProductsModel } from "../models/products.models.js";
+import {  getProductByIdService, getProductsByFilters, createProductService, updateProductService, deleteProductService } from "../services/products.service.js";
+
 
 export const getProductById = async ( req, res ) => {
     try{
@@ -36,7 +36,7 @@ export const getAllProducts = async (req, res) => {
 }
 
 export const createProduct = async (req, res) => {
-    const producto = req.body.producto
+    const producto = req.body.producto;
     console.log(producto); 
     if(!producto){
         return res.status(400).json({ message: 'Informacion del producto es requerida'});
@@ -66,4 +66,26 @@ export const updateProduct = async (req, res) => {
     console.log(error)
     res.status(500).json({ message: 'Error al actualizar el producto' });
   }
+}
+
+export const deleteProduct = async(req, res) => {
+
+    const id = req.params.id; 
+
+    if(!id){
+        return res.status(400).json({ message: "El ID del producto es requerido"});
+    }
+
+    try{
+        const deleted = await deleteProductService(id);
+
+        if(!deleted) {
+            return res.status(400).json({ message: "Producto no encotnrado"});
+        }
+
+        res.status(200).json({ message: "Producto eliminado correctamente"});
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: "Error al eliminar el producto"});
+    }
 }
